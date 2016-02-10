@@ -3,12 +3,14 @@ import java.util.HashSet;
 
 public class EnumerateSpacedKmers {
 
+	HashSet<String> listeGraines;
+	
 	public static void main(String[] args) {
 		int poids = Integer.parseInt(args[0]);
 		int longueur = Integer.parseInt(args[1]);
 		ArrayList<String> resultat1 = traitsCont(poids,longueur);
 		ArrayList<String> resultat2 = traitsCent(poids,longueur);
-		ArrayList<String> resultat3 = alterne(poids);
+		ArrayList<String> resultat3 = alterne(poids, longueur);
 		ArrayList<String> resultat4 = traitsCroi(poids, longueur);
 		HashSet<String> reponse = new HashSet<>();
 		reponse.addAll(resultat1);
@@ -19,13 +21,48 @@ public class EnumerateSpacedKmers {
 			System.out.println(string);
 	}
 	
+	
+	public EnumerateSpacedKmers(int poids, int longueur) {
+		ArrayList<String> resultat1 = traitsCont(poids,longueur);
+		ArrayList<String> resultat2 = traitsCent(poids,longueur);
+		ArrayList<String> resultat3 = alterne(poids, longueur);
+		ArrayList<String> resultat4 = traitsCroi(poids, longueur);
+		HashSet<String> reponse = new HashSet<>();
+		reponse.addAll(resultat1);
+		reponse.addAll(resultat2);
+		reponse.addAll(resultat3);
+		reponse.addAll(resultat4);
+		listeGraines = reponse;
+	}
+	
+	
 	public static ArrayList<String> traitsCont(int poids, int longueur) {
-		ArrayList<String> resultat2 = new ArrayList<String>();
-		char[] tab1 = new char[poids];
+		ArrayList<String> resultat1 = new ArrayList<String>();
+		for (int i=poids; i<longueur+1; i++) {
+			char[] tab = new char[i];
+			for (int k=0; k<i; k++) {
+				tab[k] = '#';
+			}
+			
+			char[] temp = tab.clone();
+			
+			for (int n=0; n<poids; n++) {
+				for (int j=1; j<i-poids+1; j++) {
+					temp[j+n] = '-';
+				}
+				if (temp[i-1] != '-') {
+					resultat1.add(String.valueOf(temp));
+					resultat1.add(reverse(String.valueOf(temp)));
+				}
+				temp = tab.clone();
+			}
+		}
+		
+		/*char[] tab1 = new char[poids];
 		for (int k=0; k<poids; k++) {
 			tab1[k] = '#';
 		}
-		resultat2.add(String.valueOf(tab1));
+		resultat2.add(String.valueOf(tab1));*/
 		
 		for (int i=poids+1; i<longueur+1; i++) {
 			char[] tab = new char[i];
@@ -40,18 +77,18 @@ public class EnumerateSpacedKmers {
 				for (int j=2; j<i-poids+1; j++) {
 					temp[j+n] = '-';
 				}
-				resultat2.add(String.valueOf(temp));
-				resultat2.add(reverse(String.valueOf(temp)));
+				resultat1.add(String.valueOf(temp));
+				resultat1.add(reverse(String.valueOf(temp)));
 				temp = tab.clone();
 			}
 			
 			
 		}
-		return resultat2;
+		return resultat1;
 	}
 	
 	public static ArrayList<String> traitsCent(int poids, int longueur) {
-		ArrayList<String> resultat1 = new ArrayList<String>();
+		ArrayList<String> resultat2 = new ArrayList<String>();
 		
 		for (int i=poids+1; i<longueur+1; i++) {
 			char[] tab = new char[i];
@@ -75,15 +112,15 @@ public class EnumerateSpacedKmers {
 				}
 				a++;
 			}
-			resultat1.add(String.valueOf(temp));
-			resultat1.add(reverse(String.valueOf(temp)));
+			resultat2.add(String.valueOf(temp));
+			resultat2.add(reverse(String.valueOf(temp)));
 			temp = tab.clone();
 		}
-		return resultat1;
+		return resultat2;
 	}
 	
 	
-	public static ArrayList<String> alterne(int poids) {
+	public static ArrayList<String> alterne(int poids, int longueur) {
 		ArrayList<String> resultat3 = new ArrayList<String>();
 		for (int i=poids+1; i<2*poids; i++) {
 			char[] tab = new char[i];
@@ -99,8 +136,10 @@ public class EnumerateSpacedKmers {
 				cpt--;
 				j++;
 			}
-			resultat3.add(String.valueOf(temp));
-			resultat3.add(reverse(String.valueOf(temp)));
+			if (temp.length <= longueur) {
+				resultat3.add(String.valueOf(temp));
+				resultat3.add(reverse(String.valueOf(temp)));
+			}
 		}
 		
 		return resultat3;
@@ -114,7 +153,7 @@ public class EnumerateSpacedKmers {
 			for (int j=1; j<poids-1; j++) {
 				ArrayList<String> base1 = traitsCont(poids-j,longueur-i);
 				ArrayList<String> base2 = traitsCent(poids-j,longueur-i);
-				ArrayList<String> base3 = alterne(poids-j);
+				ArrayList<String> base3 = alterne(poids-j, longueur-i);
 				for (String string : base1) {
 					String temp ="";
 					for (int k=1; k<j+1; k++)
