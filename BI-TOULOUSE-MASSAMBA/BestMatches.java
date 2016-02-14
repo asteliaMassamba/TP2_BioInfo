@@ -6,6 +6,7 @@ public class BestMatches {
 	
 	ArrayList<HashSet<String>> listesKmers;
 	ArrayList<String> listeIDs;
+	ArrayList<String> sequence;
 	
 	
 	public static void main(String[] args) {
@@ -17,44 +18,42 @@ public class BestMatches {
 		ArrayList<String> iD2 = fichier2.listeIDs;
 		ArrayList<Integer> valeurs = new ArrayList<Integer>();
 		
-		//list(graine,phrase);
-		
-			System.out.println(fichier2.listesKmers.get(1).size());
-		
-		/*for (int i=0; i<fichier2.listesKmers.size(); i++) {
-			// problemes avec le type de listesKmers, donc adapter les arguments en conséquence
-			valeurs.add((compare(fichier1.listesKmers.get(0), fichier2.listesKmers.get(i))).size());
+		for (HashSet<String> f1 : fichier1.listesKmers) {
+			for (HashSet<String> f2 : fichier2.listesKmers) {
+				valeurs.add((compare(f1, f2)).size());
+			}
 		}
-		
-		affichage(n, iD2, valeurs);*/
+
+		affichage(n, iD2, valeurs);
 		
 	}
 	
 	
 	public BestMatches(int longueur, String path) {
 		ReadFile fichier = new ReadFile(path);
-		HashSet<String> temp = new HashSet<>();
+		ArrayList<HashSet<String>> temp = new ArrayList<HashSet<String>>();
 		ArrayList<String> tableau = fichier.getTab().get(1);
 		int nbPhrases = fichier.getTab().get(1).size();
 		
 		for (int i=0; i<nbPhrases; i++) {
 			
-			temp.addAll(list(longueur,tableau.get(i)));
+			temp.add(list(longueur,tableau.get(i)));
 			
 		}
 		
 		listeIDs = fichier.getTab().get(0);
 		listesKmers = new ArrayList<HashSet<String>>();
-		listesKmers.add(temp);
+		listesKmers.addAll(temp);
+		sequence = fichier.getTab().get(1);
 		
 	}
 	
 	
-	public ArrayList<String> list(int longueur,String phrase){
+	public static HashSet<String> list(int longueur,String phrase){
 		
-		ArrayList<String> kmer = new ArrayList<>();
-		for(int i =0;i<=(phrase.length()-longueur);i++){
-			String tmp = phrase.substring(i, i+longueur);
+		HashSet<String> kmer = new HashSet<String>();
+		for(int i =0; i<(phrase.length()-longueur); i++){
+			String tmp = phrase.substring(i, i+longueur).toLowerCase();
 				kmer.add(tmp);
 		}
 		return kmer;			
@@ -65,32 +64,36 @@ public class BestMatches {
 	/* Elle va faire un max de chaque truc puis le second prend la place de l'autre.*/
 	private static void affichage(int n, ArrayList<String> listeId, ArrayList<Integer> listeValeurs) {
 		
-		int best = listeValeurs.get(0);
-		int ind = 0;
+		int m = listeId.size();
+		
+		
 		
 		for (int i=0; i<n; i++) {
-			
-			for (int j=0; j<listeId.size(); j++) {
-				if (best < listeValeurs.get(j)) {
-					best = listeValeurs.get(j);
-					ind = j;
+			if (m > 0) {
+				int best = listeValeurs.get(0);
+				int ind = 0;
+				
+				for (int j=0; j<m; j++) {
+					if (best < listeValeurs.get(j)) {
+						best = listeValeurs.get(j);
+						ind = j;
+					}
 				}
-			}
 			
-			System.out.println(listeId.get(ind) + "" + best);
-			listeId.remove(ind);
-			listeValeurs.remove(ind);
-			best = listeValeurs.get(0);
-			ind = 0;
+				System.out.println(">" + listeId.get(ind) + " \t" + best);
+				listeId.remove(ind);
+				listeValeurs.remove(ind);
+				m--;
+			}
 		}
 	
 	}
 	
 	
-	public static ArrayList<String> compare(HashSet<String> phrase1, HashSet<String> phrase2) {
-		ArrayList<String> common=new ArrayList<>();
+	public static HashSet<String> compare(HashSet<String> phrase1, HashSet<String> phrase2) {
+		HashSet<String> common = new HashSet<String>();
 		for (String kmer : phrase1) {
-			if(phrase2.contains(kmer)){
+			if (phrase2.contains(kmer)) {
 				common.add(kmer);
 			}
 		}
