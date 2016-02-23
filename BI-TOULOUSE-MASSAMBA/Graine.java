@@ -1,12 +1,12 @@
+import java.util.HashSet;
 
-public class Graine {
-
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
+public abstract class Graine {
+	
+	int longueur;
+	String graine;
+	
+	public Graine() {}
+	
+	public abstract HashSet<String> liste(Sequence sequence);
 
 }
