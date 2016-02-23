@@ -1,0 +1,237 @@
+
+Question 3
+
+On teste la fonction best-matches avec le fichier readTest.fasta (la premiere sequence du
+fichier reads-TRG.fasta).
+
+bestMatches 5 sur le fichier TRGV.fasta avec une graine de longueur :
+	- 4	: >TRGV3*01	133
+		  >TRGV3*02	130
+		  >TRGV5		122
+		  >TRGV5P*01	122
+		  >TRGV5P*02	122
+		  
+	- 8	: >TRGV3*01	171
+		  >TRGV3*02	162
+		  >TRGV5		143
+		  >TRGV5P*01	93
+		  >TRGV5P*02	93
+		  
+	- 12	: >TRGV3*01	167
+		  >TRGV3*02	154
+		  >TRGV5		131
+		  >TRGV5P*01	75
+		  >TRGV5P*02	75
+		  
+	- 16	: >TRGV3*01	163
+		  >TRGV3*02	146
+		  >TRGV5		119
+		  >TRGV5P*01	59
+		  >TRGV5P*02	59
+		  
+	- 20	: >TRGV3*01	159
+		  >TRGV3*02	138
+		  >TRGV5		107
+		  >TRGV5P*01	46
+		  >TRGV5P*02	46
+
+
+bestMatches 5 sur le fichier TRGV.fasta avec une graine de longueur :
+	- 4	: >TRGJP1		45
+		  >TRGJP2		42
+		  >TRGJP		33
+		  >TRGJ1*01	25
+		  >TRGJ2		24
+		  
+	- 8	: >TRGJP1		32
+		  >TRGJP2		14
+		  >TRGJ1*01	0
+		  >TRGJ1*02	0
+		  >TRGJ2		0
+		  
+	- 12	: >TRGJP1		28
+		  >TRGJP2		8
+		  >TRGJ1*01	0
+		  >TRGJ1*02	0
+		  >TRGJ2		0
+		  
+	- 16	: >TRGJP1		24
+		  >TRGJP2		4
+		  >TRGJ1*01	0
+		  >TRGJ1*02	0
+		  >TRGJ2		0
+		  
+	- 20	: >TRGJP1		20
+		  >TRGJP2		0
+		  >TRGJ1*01	0
+		  >TRGJ1*02	0
+		  >TRGJ2		0
+
+
+On teste la fonction VJ-discover avec les fichiers reads-TRG.fasta,
+TRGV.fasta et TRGJ.fasta.
+
+VJ-discover avec une graine de longueur :
+	- 4	: >read-01		>TRGV3*01		>TRGJP1
+		  >read-02		>TRGV8		>TRGJP1
+		  >read-03		>TRGV3*01		>TRGJ1*01
+		  >read-04		>TRGV3*01		>TRGJP1
+		  >read-05		>TRGV3*01		>TRGJ1*01
+		  >read-06		>TRGV2*01		>TRGJP1
+		  >read-07		>TRGV3*01		>TRGJP1
+		  >read-08		>TRGV2*01		>TRGJ1*01
+		  >read-09		>TRGV3*01		>TRGJP1
+		  >read-10		>TRGV4*02		>TRGJ1*01
+		  >read-11		>TRGV3*01		>TRGJP1
+		  >read-12		>TRGV3*01		>TRGJ1*01
+		  
+	- 8, 12, 16, 20 :
+		  >read-01		>TRGV3*01		>TRGJP1
+		  >read-02		>TRGV3*01		>TRGJ1*01
+		  >read-03		>TRGV3*01		>TRGJ1*01
+		  >read-04		>TRGV3*01		>TRGJP1
+		  >read-05		>TRGV3*01		>TRGJ1*01
+		  >read-06		>TRGV2*02		>TRGJP1
+		  >read-07		>TRGV3*01		>TRGJP1
+		  >read-08		>TRGV2*02		>TRGJ1*01
+		  >read-09		>TRGV3*01		>TRGJP1
+		  >read-10		>TRGV4*02		>TRGJ1*01
+		  >read-11		>TRGV3*01		>TRGJP1
+		  >read-12		>TRGV3*01		>TRGJ1*01
+		  
+
+	On peut remarquer que, pour des kmers continus, il y a plus de correspondances entre 
+le read-01 et les TRGV qu'entre le read-01 et les TRGJ.
+Bien sûr, plus le kmer et long, plus le nombre de ces correspondances decroit voir meme
+n'en a plus aucune comme pour la majorite des TRGJ, dès une longueur de kmers de 8.
+On peut en deduire que le read-01 et le TRGV ont un ancetre commun et que celui-ci
+devait en avoir un avec l'ancetre commun du TRGJ.
+Le fait que pour un kmer de longueur 4 on ait autant de correspondance entre  le TRGJ
+et le read-01 peut s'expliquer par le fait que le nombre de combinaisons de 4 codons soit
+faible (64).
+
+	On peut aussi voir que la plupart des reads ont une haute correspondance avec certaines
+versions de TRGV et de TRGJ. C'est a dire que l'on voit assez souvent les memes versions
+de TRG avoir la plus haute correspondance avec la plupart des reads.
+Par exemple, le TRGV3*01 revient tres souvent. Pour le TRGJ, seuls le TRGJP1 et le TRGJ1*01
+sont presents.
+On peut donc en deduire que ces trois TRG sont plus proches.
+
+
+
+A titre de comparaison, on peut verifier ces suppositions avec des graines espacees de
+longueur 9 :
+
+bestMatches 5 sur le fichier TRGV.fasta avec la graine :
+	- ####-####	: >TRGV3*01	169
+				  >TRGV3*02	160
+				  >TRGV5		139
+				  >TRGV5P*01	93
+				  >TRGV5P*02	93
+		  
+	- ##-######	: >TRGV3*01	171
+				  >TRGV3*02	162
+				  >TRGV5		142
+				  >TRGV5P*01	96
+				  >TRGV5P*02	96
+		  
+	- #####-###	: >TRGV3*01	170
+				  >TRGV3*02	161
+				  >TRGV5		141
+				  >TRGV5P*01	95
+				  >TRGV5P*02	95
+		  
+	- #-#######	: >TRGV3*01	171
+				  >TRGV3*02	162
+				  >TRGV5		143
+				  >TRGV5P*01	96
+				  >TRGV5P*02	96
+		  
+	- ###-##-##	: >TRGV3*01	170
+				  >TRGV3*02	162
+				  >TRGV5		142
+				  >TRGV5P*01	102
+				  >TRGV5P*02	102
+
+
+bestMatches 5 sur le fichier TRGV.fasta avec une graine de longueur :
+	- ####-####	: >TRGJP1		31
+				  >TRGJP2		13
+				  >TRGJP		2
+				  >TRGJ1*01	0
+				  >TRGJ1*02	0
+		  
+	- ##-######	: >TRGJP1		31
+				  >TRGJP2		13
+				  >TRGJ1*01	1
+				  >TRGJ2		1
+				  >TRGJP		1
+		  
+	- #####-###	: >TRGJP1		32
+				  >TRGJP2		13
+				  >TRGJ1*01	0
+				  >TRGJ1*02	0
+				  >TRGJ2		0
+		  
+	- #-#######	: >TRGJP1		31
+				  >TRGJP2		13
+				  >TRGJ1*01	1
+				  >TRGJ2		1
+				  >TRGJ1*02	0
+		  
+	- ###-##-##	: >TRGJP1		32
+				  >TRGJP2		14
+				  >TRGJP		3
+				  >TRGJ1*01	0
+				  >TRGJ1*02	0
+
+
+On teste la fonction VJ-discover avec les fichiers reads-TRG.fasta,
+TRGV.fasta et TRGJ.fasta.
+
+VJ-discover avec la graine :
+	- "####-####", "#####-###", "###-##-##" : 
+		  >read-01		>TRGV3*01		>TRGJP1
+		  >read-02		>TRGV3*01		>TRGJ1*01
+		  >read-03		>TRGV3*01		>TRGJ1*01
+		  >read-04		>TRGV3*01		>TRGJP1
+		  >read-05		>TRGV3*01		>TRGJ1*01
+		  >read-06		>TRGV2*02		>TRGJP1
+		  >read-07		>TRGV3*01		>TRGJP1
+		  >read-08		>TRGV2*02		>TRGJ1*01
+		  >read-09		>TRGV3*01		>TRGJP1
+		  >read-10		>TRGV4*02		>TRGJ1*01
+		  >read-11		>TRGV3*01		>TRGJP1
+		  >read-12		>TRGV3*01		>TRGJ1*02
+		  
+	- ##-######	: 
+		  >read-01		>TRGV3*01		>TRGJP1
+		  >read-02		>TRGV3*01		>TRGJ1*01
+		  >read-03		>TRGV3*01		>TRGJ1*01
+		  >read-04		>TRGV3*01		>TRGJP1
+		  >read-05		>TRGV3*01		>TRGJ1*01
+		  >read-06		>TRGV2*02		>TRGJP1
+		  >read-07		>TRGV3*01		>TRGJP1
+		  >read-08		>TRGV2*02		>TRGJ1*01
+		  >read-09		>TRGV3*01		>TRGJP1
+		  >read-10		>TRGV4*02		>TRGJ1*01
+		  >read-11		>TRGV3*01		>TRGJP1
+		  >read-12		>TRGV3*01		>TRGJ2
+	
+	- #-#######	: 
+		  >read-01		>TRGV3*01		>TRGJP1
+		  >read-02		>TRGV3*01		>TRGJ1*01
+		  >read-03		>TRGV3*01		>TRGJ1*01
+		  >read-04		>TRGV3*01		>TRGJP1
+		  >read-05		>TRGV3*01		>TRGJ1*01
+		  >read-06		>TRGV2*02		>TRGJP1
+		  >read-07		>TRGV3*01		>TRGJP1
+		  >read-08		>TRGV2*02		>TRGJ1*01
+		  >read-09		>TRGV3*01		>TRGJP1
+		  >read-10		>TRGV4*02		>TRGJ1*01
+		  >read-11		>TRGV3*01		>TRGJP1
+		  >read-12		>TRGV3*01		>TRGJ1*01
+
+
+Ces resultats confirment nos suppositions.
+
